@@ -1,0 +1,4 @@
+site_name: Gerard's Documentation
+
+nav:
+  - Jenkins CICD: index.md
