@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>Gerard's Documentation</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">Gerard's Documentation</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#jenkins-tutorial" class="nav-link">Jenkins Tutorial</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#what-is-jenkins" class="nav-link">What is Jenkins ?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#tools-and-technology" class="nav-link">Tools and technology</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#table-of-contents" class="nav-link">Table of contents</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#cicd-workflow-overview" class="nav-link">CI/CD Workflow Overview:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="jenkins-tutorial">Jenkins Tutorial</h1>
+<p>My objective today is to demonstrate how to configure a CI/CD pipeline and deploy a containerized application with Jenkins using an AWS Cloud.</p>
+<h2 id="what-is-jenkins">What is Jenkins ?</h2>
+<p>Jenkins is a popular open source CI/CD tool. It is used to build and test your product continuously. To see this in action, I will walk you through a series of steps or stages.</p>
+<h2 id="tools-and-technology">Tools and technology</h2>
+<p>Microservices in AWS, GitHub, Docker and Jenkins. </p>
+<h2 id="table-of-contents">Table of contents</h2>
+<p>✔ Step 1: Start an EC2 Server with Enabled Ports. <br>
+✔ Step 2: Connect to the Server via SSH. <br>
+✔ Step 3: Update the Server. <br>
+✔ Step 4: Install Java JDK and Jenkins Using Shell Script. <br>
+✔ Step 5: Creating a Declarative Pipeline and Deploying our application.<br>
+✔ Step 6: Full Automation with Webhooks. <br>
+✔ Step 7: Further simplify our pipeline with "Pipeline Scripts from SCM" to make it more effective and easier to modify. <br></p>
+<h3 id="step-1-start-an-ec2-server-with-enabled-ports">Step 1: Start an EC2 Server with Enabled Ports</h3>
+<h3 id="step-2-connect-to-the-server-via-ssh">Step 2: Connect to the Server via SSH</h3>
+<pre><code class="language-sh">sudo apt update
+git clone https://github.com/GitHub-Username/name-of-repository.io
+cd name-of repository
+sudo apt install git docker.io -y
+sudo usermod -aG docker ubuntu
+sudo reboot
+</code></pre>
+<ul>
+<li>Reconnect using the SSH</li>
+<li>Check if there are any <code>docker images</code> and if there's any</li>
+<li>Build a docker Image using <code>docker build -t name-of-docker-image .</code></li>
+<li>Check if Image exist <code>docker images</code></li>
+<li>Check if Image is running <code>docker ps</code></li>
+<li>Run Image <code>docker run -d -p 5000:5000 name-of-docker-image</code></li>
+<li>Stop image <code>docker stop container's-id</code></li>
+</ul>
+<h3 id="step-3-update-the-server-vis-ssh">Step 3: Update the Server vis SSH</h3>
+<pre><code>sudo reboot
+sudo apt upgrade -y
+</code></pre>
+<h3 id="step-4-install-java-jdk-and-jenkins-using-shell-script">Step 4: Install Java JDK and Jenkins Using Shell Script</h3>
+<ul>
+<li>Jenkins requires Java to run, Install Java JDK:</li>
+</ul>
+<pre><code>sudo apt install openjdk-11-jdk -y
+</code></pre>
+<ul>
+<li>Add the Jenkins repository key and package source to apt:</li>
+</ul>
+<pre><code>wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+</code></pre>
+<ul>
+<li>Add Jenkins Repository:</li>
+</ul>
+<pre><code>sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ &gt; /etc/apt/sources.list.d/jenkins.list'
+</code></pre>
+<p>NOTE!!!  If any error is encountered, use this script and replace the <PUBKEY> with the actual key values.</p>
+<pre><code>gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv &lt;PUBKEY&gt;
+gpg --export --armor &lt;PUBKEY&gt; | sudo apt-key add -
+sudo apt-get update
+</code></pre>
+<ul>
+<li>Update the Package List:</li>
+</ul>
+<pre><code>sudo apt update
+</code></pre>
+<ul>
+<li>Install Jenkins:</li>
+</ul>
+<pre><code>sudo apt install jenkins
+</code></pre>
+<ul>
+<li>Check the version:</li>
+</ul>
+<pre><code>jenkins --version
+</code></pre>
+<ul>
+<li>Grant Jenkins access to build and run Docker images:</li>
+</ul>
+<pre><code>sudo usermod -aG docker jenkins
+sudo reboot
+</code></pre>
+<ul>
+<li>
+<p>To get the Jenkins password <br></p>
+<blockquote>
+<p>To access Jenkins on the search bar put the instance:8080</p>
+</blockquote>
+<p><code>sudo cat /var/lib/jenkins/secrets/initialAdminPassword</code></p>
+</li>
+</ul>
+<h3 id="step-5-creating-a-declarative-pipeline">Step 5: Creating a Declarative Pipeline</h3>
+<p>Now, let's create a declarative pipeline in Jenkins:</p>
+<ol>
+<li>Click on "New Item" and name it whatever, t-ex "cicd-pipeline".</li>
+<li>
+<p>Under the configuration settings, select the "GitHub project" and provide the GitHub repository URL:</p>
+<p><code>https://github.com/Github_Username/name-of-repository.git</code></p>
+<p>Set the name to "Segula-app"</p>
+</li>
+<li>
+<p>Enable the "Build Triggers" option by ticking the box "GitHub hook trigger for GITScm pooling".</p>
+</li>
+<li>
+<p>In the "Pipeline" section, choose "Pipeline Script" and add the following script:</p>
+<pre><code>pipeline{
+    agent any
+    environment {
+        DOCKERHUB_CREDENTIALS=credentials('dockerHub')
+    }
+
+    stages {
+        stage('verify tools') {
+            steps {
+                sh '''
+                    docker info
+                    docker version
+                    docker-compose version
+                '''
+            }
+        }
+        stage('gitclone') {
+            steps {
+                git url: "https://github.com/GitHub-Username/repository-name.git", branch: "main"
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'docker build -t dockerHub-username/dockerHub-image:latest .'
+            }
+        }
+        stage('Login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        stage('Push') {
+            steps {
+                sh 'docker push DockerHub-username/dockerHub-image:latest'
+            }
+        }
+        stage("Deploy") {
+            steps {
+                echo "Deploying the container"
+                sh "docker-compose down"
+                // sh "docker-compose pull"  Pull the latest images
+                sh "docker-compose up -d" // Start the services in detached mode
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker logout'
+        }
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>Add DockerHub credentials in the global credentials section with the ID as "dockerHub" along with the username and password.</p>
+</li>
+<li>
+<p>Create a Docker-Compose file in your repository t.ex docker-compose.yml and paste the scripts below to enhance the deployment of Docker containers:</p>
+</li>
+</ol>
+<pre><code class="language-sh">version: &quot;3.3&quot;
+services:
+web:
+    image: dockerHub-username/dockerHub-image:latest
+    ports:
+    - &quot;5000:5000&quot;
+</code></pre>
+<ol>
+<li>Install Docker Compose by running the script below, before running the pipeline.</li>
+</ol>
+<pre><code>sudo curl -L &quot;https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+</code></pre>
+<p>Once everything is set up, you can manually trigger the pipeline by clicking the build button in the Jenkins interface. <br>
+This will build successfully and the app is now deployed and ready to use. This is the benefits of automation and continuous integration.</p>
+<h3 id="step-6-full-automation-with-webhooks">Step 6: Full Automation with Webhooks.</h3>
+<p>To achieve full automation, I will configure webhooks so that any changes pushed to the GitHub repository will trigger the Jenkins pipeline and initiate the deployment process automatically. To archieve that we.</p>
+<ul>
+<li>Go to your repository, settings, Webhooks, Add webhook.</li>
+<li>In the "Payload URL", paste the url <code>http://jenkins dashboard/github-webhook/</code> and "Content type", select <code>application/jason</code>.</li>
+<li>Update your code on your repository and see it update on the server.</li>
+</ul>
+<h3 id="step-7-further-simplify-our-pipeline-with-pipeline-scripts-from-scm">Step 7: Further simplify our pipeline with "Pipeline Scripts from SCM"</h3>
+<p>To make your pipeline more effective and easier to modify, you can use "Pipeline Script from SCM." This approach allows you to provide a GitHub repository link containing the Jenkinsfile. By adopting this method, any developer in your team with proper permissions can review and modify the Jenkinsfile.</p>
+<ul>
+<li>In your repository create a <code>Jenkinsfile</code> and paste the scripts</li>
+<li>In the Jenkins dashboard select <code>Pipeline script from SCM</code>, Put the <code>repository URL</code> and <code>Credential</code> and the <code>branch</code>. <br></li>
+</ul>
+<p>By leveraging webhooks and the "Pipeline Script from SCM" approach, your team can work collaboratively on the Jenkinsfile and make changes with ease, eliminating the need to access the Jenkins dashboard. </p>
+<h2 id="cicd-workflow-overview">CI/CD Workflow Overview:</h2>
+<ul>
+<li>Developer pushes code changes to the GitHub repository.</li>
+<li>Jenkins detects the code change event through webhook integration with GitHub.</li>
+<li>Jenkins starts the CI/CD pipeline, which includes steps to build, test, and package the application using Docker.</li>
+<li>Jenkins pushes the Docker image of the application to DockerHub.</li>
+<li>In a deployment stage, Jenkins or another tool (e.g., Kubernetes) can retrieve the Docker image from DockerHub and deploy it to a target environment, such as a server or cloud service.</li>
+</ul>
+<p>Overall, this workflow enables a consistent and automated process for building, testing, and deploying applications, ensuring that changes are seamlessly propagated from source control to production.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.5.2
+Build Date UTC : 2023-09-18 10:44:13.017470+00:00
+-->
